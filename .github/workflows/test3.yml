@@ -1,0 +1,24 @@
+name: Build UACme
+
+on: [push, workflow_dispatch]
+
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+
+jobs:
+  build:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Add MSBuild to PATH
+        uses: microsoft/setup-msbuild@v2
+        
+      - name: Build
+        run: msbuild Source\UACMe.sln /p:Configuration=Release /p:Platform=x64 /p:PlatformToolset=v143
+        
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: Akagi64
+          path: Source\x64\Release\Akagi64.exe
